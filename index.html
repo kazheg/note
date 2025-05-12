@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel Notes</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #ffb6c1;
+            --secondary: #a5dee5;
+            --accent: #fdfd96;
+            --text: #5a5a5a;
+            --light-bg: #f9f9f9;
+            --pixel-border: #8a8a8a;
+            --completed: #c1e1c1;
+        }
+
+        [data-theme="pink"] {
+            --primary: #ffb6c1;
+            --secondary: #ffc8dd;
+            --accent: #ffafcc;
+        }
+
+        [data-theme="blue"] {
+            --primary: #a5dee5;
+            --secondary: #b8e0f9;
+            --accent: #98d2eb;
+        }
+
+        [data-theme="yellow"] {
+            --primary: #fdfd96;
+            --secondary: #fff9b0;
+            --accent: #ffee93;
+        }
+
+        [data-theme="green"] {
+            --primary: #c1e1c1;
+            --secondary: #d4ebd4;
+            --accent: #b6e6b6;
+        }
+
+        [data-theme="purple"] {
+            --primary: #d8b5ff;
+            --secondary: #e5c9ff;
+            --accent: #c8a4ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Quicksand', sans-serif;
+            color: var(--text);
+        }
+
+        body {
+            background-color: var(--light-bg);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Pixel Art Styling */
+        .pixel-border {
+            image-rendering: pixelated;
+            border-style: solid;
+            border-width: 4px;
+            border-image: url("data:image/svg+xml,%3Csvg width='8' height='8' viewBox='0 0 8 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0 0H8V8H0V0ZM1 1V7H7V1H1Z' fill='%238a8a8a'/%3E%3C/svg%3E") 2;
+            border-image-repeat: stretch;
+            padding: 8px;
+            position: relative;
+        }
+
+        .pixel-button {
+            image-rendering: pixelated;
+            border: none;
+            background-color: var(--primary);
+            padding: 8px 16px;
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.1s;
+            border-style: solid;
+            border-width: 4px;
+            border-image: url("data:image/svg+xml,%3Csvg width='8' height='8' viewBox='0 0 8 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0 0H8V8H0V0ZM1 1V7H7V1H1Z' fill='%238a8a8a'/%3E%3C/svg%3E") 2;
+            border-image-repeat: stretch;
+        }
+
+        .pixel-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .pixel-button:active {
+            transform: translateY(0);
+        }
+
+        /* Header */
+        header {
+            background-color: var(--primary);
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            image-rendering: pixelated;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 16px;
+        }
+
+        /* Main Container */
+        .container {
+            display: flex;
+            flex: 1;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 220px;
+            background-color: var(--secondary);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .nav-item.active {
+            background-color: var(--primary);
+        }
+
+        .nav-item:hover:not(.active) {
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            image-rendering: pixelated;
+        }
+
+        .theme-selector {
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .theme-selector h3 {
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .theme-options {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .theme-option {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .theme-option.active {
+            border-color: var(--text);
+        }
+
+        .theme-pink { background-color: #ffb6c1; }
+        .theme-blue { background-color: #a5dee5; }
+        .theme-yellow { background-color: #fdfd96; }
+        .theme-green { background-color: #c1e1c1; }
+        .theme-purple { background-color: #d8b5ff; }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow-y: auto;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .content-header h2 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+        }
+
+        .search-bar input {
+            border: none;
+            outline: none;
+            background: transparent;
+            width: 200px;
+        }
+
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 16px;
+        }
+
+        .note-card {
+            background-color: white;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .note-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .note-header {
+            padding: 12px;
+            background-color: var(--primary);
+            font-weight: 600;
+        }
+
+        .note-content {
+            padding: 12px;
+            flex: 1;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .note-footer {
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: #777;
+            border-top: 1px solid #eee;
+        }
+
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .task-item {
+            background-color: white;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            transition: background-color 0.2s;
+        }
+
+        .task-item.completed {
+            background-color: var(--completed);
+        }
+
+        .task-checkbox {
+            width: 24px;
+            height: 24px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .task-checkbox-input {
+            opacity: 0;
+            position: absolute;
+            cursor: pointer;
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 24px;
+            height: 24px;
+            background-color: white;
+            image-rendering: pixelated;
+            border-style: solid;
+            border-width: 4px;
+            border-image: url("data:image/svg+xml,%3Csvg width='8' height='8' viewBox='0 0 8 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0 0H8V8H0V0ZM1 1V7H7V1H1Z' fill='%238a8a8a'/%3E%3C/svg%3E") 2;
+            border-image-repeat: stretch;
+        }
+
+        .task-checkbox-input:checked ~ .checkmark {
+            background-color: var(--primary);
+            background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 8L7 11L12 5' stroke='%235a5a5a' stroke-width='2' stroke-linecap='square'/%3E%3C/svg%3E");
+            background-size: 100%;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .task-content {
+            flex: 1;
+        }
+
+        .task-title {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .task-item.completed .task-title {
+            text-decoration: line-through;
+            color: #777;
+        }
+
+        .task-date {
+            font-size: 12px;
+            color: #777;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-icon {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        .action-icon:hover {
+            opacity: 1;
+        }
+
+        .add-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background-color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+            image-rendering: pixelated;
+            border-style: solid;
+            border-width: 4px;
+            border-image: url("data:image/svg+xml,%3Csvg width='8' height='8' viewBox='0 0 8 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0 0H8V8H0V0ZM1 1V7H7V1H1Z' fill='%238a8a8a'/%3E%3C/svg%3E") 2;
+            border-image-repeat: stretch;
+        }
+
+        .add-button:hover {
+            transform: scale(1.1);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal {
+            background-color: white;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.3s;
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            background-color: var(--primary);
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .modal-footer {
+            padding: 16px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            border-top: 1px solid #eee;
+        }
+
+        /* Pixel Art Icons */
+        .pixel-icon {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            image-rendering: pixelated;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                overflow-x: auto;
+                padding: 12px;
+            }
+
+            .theme-selector {
+                display: none;
+            }
+
+            .notes-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+
+        @media (max-width: 480px) {
+            .notes-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-actions {
+                gap: 8px;
+            }
+
+            .search-bar {
+                width: 100%;
+            }
+
+            .search-bar input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body data-theme="pink">
+    <!-- Header -->
+    <header class="pixel-border">
+        <div class="logo">
+            <svg class="logo-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="4" y="4" width="4" height="4" fill="#5a5a5a"/>
+                <rect x="8" y="4" width="4" height="4" fill="#5a5a5a"/>
+                <rect x="12" y="4" width="4" height="4" fill="#5a5a5a"/>
+                <rect x="16" y="4" width="4" height="4" fill="#5a5a5a"/>
+                <rect x="20" y="4" width="4" height="4" fill="#5a5a5a"/>
+                <rect x="24" y="4" width="4" height="4" fill="#5a5a5a"/>
+                <rect x="4" y="8" width="4" height="4" fill="#5a5a5a"/>
+                <rect x="24" y="8" width="4" height="4" fill="#5a5a5a"/>
+                <rect x="4" y="12" width="4" height="4" fill="#5a5a5a"/>
+                <rect x="24" y="12" width="4" height="4" fill="#5a5a5a"/>
+                <rect x="4" y="16" width="4" height="4" fill="#5a5a5a"/>
+                <rect x="24" y="16" width="4" height="4" fill="#5a5a5a"/>
+                <rect x="4" y="20" width="4" height="4" fill="#5a5a5a"/>
+                <rect x="24" y="20" width="4" height="4" fill="#5a5a5a"/>
+                <rect x="4" y="24" width="4" height="4" fill="#5a5a5a"/>
+                <rect x="8" y="24" width="4" height="4" fill="#5a5a5a"/>
+                <rect x="12" y="24" width="4" height="4" fill="#5a5a5a"/>
+                <rect x="16" y="24" width="4" height="4" fill="#5a5a5a"/>
+                <rect x="20" y="24" width="4" height="4" fill="#5a5a5a"/>
+                <rect x="24" y="24" width="4" height="4" fill="#5a5a5a"/>
+                <rect x="8" y="12" width="4" height="4" fill="#5a5a5a"/>
+                <rect x="12" y="12" width="4" height="4" fill="#5a5a5a"/>
+                <rect x="16" y="12" width="4" height="4" fill="#5a5a5a"/>
+                <rect x="20" y="12" width="4" height="4" fill="#5a5a5a"/>
+                <rect x="8" y="16" width="4" height="4" fill="#5a5a5a"/>
+                <rect x="12" y="16" width="4" height="4" fill="#5a5a5a"/>
+                <rect x="16" y="16" width="4" height="4" fill="#5a5a5a"/>
+                <rect x="20" y="16" width="4" height="4" fill="#5a5a5a"/>
+            </svg>
+            <h1>Pixel Notes</h1>
+        </div>
+        <div class="header-actions">
+            <button class="pixel-button" id="settings-btn">
+                <!-- Cải thiện biểu tượng cài đặt -->
+                <svg class="pixel-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="10" y="2" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="10" y="18" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="2" y="10" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="18" y="10" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="6" y="6" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="14" y="6" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="6" y="14" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="14" y="14" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="10" y="10" width="4" height="4" fill="#5a5a5a"/>
+                </svg>
+                Cài đặt
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar pixel-border">
+            <div class="nav-item active" data-view="notes">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="4" y="4" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="8" y="4" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="12" y="4" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="16" y="4" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="4" y="8" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="4" y="12" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="4" y="16" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="8" y="16" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="12" y="16" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="16" y="16" width="4" height="4" fill="#5a5a5a"/>
+                </svg>
+                <span>Ghi chú</span>
+            </div>
+            <div class="nav-item" data-view="tasks">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="4" y="4" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="8" y="4" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="12" y="4" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="16" y="4" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="4" y="8" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="12" y="8" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="4" y="12" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="8" y="12" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="12" y="12" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="16" y="12" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="4" y="16" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="12" y="16" width="4" height="4" fill="#5a5a5a"/>
+                </svg>
+                <span>Công việc</span>
+            </div>
+            <div class="nav-item" data-view="ideas">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="8" y="4" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="12" y="4" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="4" y="8" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="16" y="8" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="8" y="8" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="12" y="8" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="8" y="12" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="12" y="12" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="8" y="16" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="12" y="16" width="4" height="4" fill="#5a5a5a"/>
+                </svg>
+                <span>Ý tưởng</span>
+            </div>
+            <div class="nav-item" data-view="tags">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="4" y="8" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="8" y="8" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="12" y="8" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="16" y="8" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="4" y="12" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="8" y="12" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="12" y="12" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="16" y="12" width="4" height="4" fill="#5a5a5a"/>
+                </svg>
+                <span>Thẻ</span>
+            </div>
+            <div class="nav-item" data-view="trash">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="8" y="4" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="12" y="4" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="4" y="8" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="16" y="8" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="4" y="12" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="8" y="12" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="12" y="12" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="16" y="12" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="4" y="16" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="8" y="16" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="12" y="16" width="4" height="4" fill="#5a5a5a"/>
+                    <rect x="16" y="16" width="4" height="4" fill="#5a5a5a"/>
+                </svg>
+                <span>Thùng rác</span>
+            </div>
+
+            <div class="theme-selector">
+                <h3>Chọn màu sắc</h3>
+                <div class="theme-options">
+                    <div class="theme-option theme-pink active" data-theme="pink"></div>
+                    <div class="theme-option theme-blue" data-theme="blue"></div>
+                    <div class="theme-option theme-yellow" data-theme="yellow"></div>
+                    <div class="theme-option theme-green" data-theme="green"></div>
+                    <div class="theme-option theme-purple" data-theme="purple"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="content-header">
+                <h2>Ghi chú</h2>
+                <div class="search-bar pixel-border">
+                    <svg class="pixel-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="8" y="4" width="4" height="4" fill="#5a5a5a"/>
+                        <rect x="12" y="4" width="4" height="4" fill="#5a5a5a"/>
+                        <rect x="4" y="8" width="4" height="4" fill="#5a5a5a"/>
+                        <rect x="16" y="8" width="4" height="4" fill="#5a5a5a"/>
+                        <rect x="4" y="12" width="4" height="4" fill="#5a5a5a"/>
+                        <rect x="16" y="12" width="4" height="4" fill="#5a5a5a"/>
+                        <rect x="8" y="16" width="4" height="4" fill="#5a5a5a"/>
+                        <rect x="12" y="16" width="4" height="4" fill="#5a5a5a"/>
+                    </svg>
+                    <input type="text" placeholder="Tìm kiếm...">
+                </div>
+            </div>
+
+            <!-- Notes View -->
+            <div class="view-content" id="notes-view">
+                <div class="notes-grid">
+                    <div class="note-card pixel-border">
+                        <div class="note-header">Ý tưởng dự án mới</div>
+                        <div class="note-content">
+                            Tạo một ứng dụng quản lý thời gian với giao diện pixel art dễ thương. Có thể thêm tính năng theo dõi thói quen và nhắc nhở.
+                        </div>
+                        <div class="note-footer">
+                            <span>15/06/2023</span>
+                            <span>Dự án</span>
+                        </div>
+                    </div>
+                    <div class="note-card pixel-border">
+                        <div class="note-header">Danh sách mua sắm</div>
+                        <div class="note-content">
+                            - Sữa
+                            - Trứng
+                            - Bánh mì
+                            - Rau xà lách
+                            - Cà chua
+                        </div>
+                        <div class="note-footer">
+                            <span>18/06/2023</span>
+                            <span>Cá nhân</span>
+                        </div>
+                    </div>
+                    <div class="note-card pixel-border">
+                        <div class="note-header">Lịch họp tuần này</div>
+                        <div class="note-content">
+                            - Thứ 2: Họp team 9:00
+                            - Thứ 4: Gặp khách hàng 14:00
+                            - Thứ 6: Review dự án 10:30
+                        </div>
+                        <div class="note-footer">
+                            <span>20/06/2023</span>
+                            <span>Công việc</span>
+                        </div>
+                    </div>
+                    <div class="note-card pixel-border">
+                        <div class="note-header">Công thức nấu ăn</div>
+                        <div class="note-content">
+                            Cách làm bánh pancake:
+                            - 200g bột mì
+                            - 2 quả trứng
+                            - 300ml sữa
+                            - 2 muỗng đường
+                        </div>
+                        <div class="note-footer">
+                            <span>22/06/2023</span>
+                            <span>Nấu ăn</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tasks View (Hidden by default) -->
+            <div class="view-content" id="tasks-view" style="display: none;">
+                <div class="task-list">
+                    <div class="task-item pixel-border">
+                        <label class="task-checkbox">
+                            <input type="checkbox" class="task-checkbox-input">
+                            <span class="checkmark"></span>
+                        </label>
+                        <div class="task-content">
+                            <div class="task-title">Hoàn thành báo cáo dự án</div>
+                            <div class="task-date">Hạn: 25/06/2023</div>
+                        </div>
+                        <div class="task-actions">
+                            <svg class="action-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="8" y="4" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="12" y="4" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="8" y="8" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="12" y="8" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="8" y="12" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="12" y="12" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="8" y="16" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="12" y="16" width="4" height="4" fill="#5a5a5a"/>
+                            </svg>
+                            <svg class="action-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="8" y="4" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="12" y="4" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="4" y="8" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="16" y="8" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="4" y="12" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="16" y="12" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="8" y="16" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="12" y="16" width="4" height="4" fill="#5a5a5a"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="task-item pixel-border completed">
+                        <label class="task-checkbox">
+                            <input type="checkbox" class="task-checkbox-input" checked>
+                            <span class="checkmark"></span>
+                        </label>
+                        <div class="task-content">
+                            <div class="task-title">Gửi email cho khách hàng</div>
+                            <div class="task-date">Hoàn thành: 20/06/2023</div>
+                        </div>
+                        <div class="task-actions">
+                            <svg class="action-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="8" y="4" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="12" y="4" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="8" y="8" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="12" y="8" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="8" y="12" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="12" y="12" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="8" y="16" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="12" y="16" width="4" height="4" fill="#5a5a5a"/>
+                            </svg>
+                            <svg class="action-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="8" y="4" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="12" y="4" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="4" y="8" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="16" y="8" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="4" y="12" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="16" y="12" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="8" y="16" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="12" y="16" width="4" height="4" fill="#5a5a5a"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="task-item pixel-border">
+                        <label class="task-checkbox">
+                            <input type="checkbox" class="task-checkbox-input">
+                            <span class="checkmark"></span>
+                        </label>
+                        <div class="task-content">
+                            <div class="task-title">Chuẩn bị tài liệu cho cuộc họp</div>
+                            <div class="task-date">Hạn: 23/06/2023</div>
+                        </div>
+                        <div class="task-actions">
+                            <svg class="action-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="8" y="4" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="12" y="4" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="8" y="8" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="12" y="8" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="8" y="12" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="12" y="12" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="8" y="16" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="12" y="16" width="4" height="4" fill="#5a5a5a"/>
+                            </svg>
+                            <svg class="action-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="8" y="4" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="12" y="4" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="4" y="8" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="16" y="8" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="4" y="12" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="16" y="12" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="8" y="16" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="12" y="16" width="4" height="4" fill="#5a5a5a"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="task-item pixel-border">
+                        <label class="task-checkbox">
+                            <input type="checkbox" class="task-checkbox-input">
+                            <span class="checkmark"></span>
+                        </label>
+                        <div class="task-content">
+                            <div class="task-title">Đặt lịch họp với team thiết kế</div>
+                            <div class="task-date">Hạn: 27/06/2023</div>
+                        </div>
+                        <div class="task-actions">
+                            <svg class="action-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="8" y="4" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="12" y="4" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="8" y="8" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="12" y="8" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="8" y="12" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="12" y="12" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="8" y="16" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="12" y="16" width="4" height="4" fill="#5a5a5a"/>
+                            </svg>
+                            <svg class="action-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="8" y="4" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="12" y="4" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="4" y="8" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="16" y="8" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="4" y="12" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="16" y="12" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="8" y="16" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="12" y="16" width="4" height="4" fill="#5a5a5a"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ideas View (Hidden by default) -->
+            <div class="view-content" id="ideas-view" style="display: none;">
+                <div class="notes-grid">
+                    <div class="note-card pixel-border">
+                        <div class="note-header">Ứng dụng học ngôn ngữ</div>
+                        <div class="note-content">
+                            Tạo một ứng dụng học ngôn ngữ với giao diện game pixel art. Người dùng có thể thu thập nhân vật pixel khi hoàn thành các bài học.
+                        </div>
+                        <div class="note-footer">
+                            <span>10/06/2023</span>
+                            <span>Ý tưởng</span>
+                        </div>
+                    </div>
+                    <div class="note-card pixel-border">
+                        <div class="note-header">Thiết kế blog cá nhân</div>
+                        <div class="note-content">
+                            Blog với chủ đề retro gaming, sử dụng phong cách pixel art và màu sắc pastel. Có thể thêm các animation nhỏ khi người dùng tương tác.
+                        </div>
+                        <div class="note-footer">
+                            <span>12/06/2023</span>
+                            <span>Ý tưởng</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tags View (Hidden by default) -->
+            <div class="view-content" id="tags-view" style="display: none;">
+                <div class="notes-grid">
+                    <div class="note-card pixel-border">
+                        <div class="note-header">Công việc</div>
+                        <div class="note-content">
+                            5 ghi chú, 3 công việc
+                        </div>
+                    </div>
+                    <div class="note-card pixel-border">
+                        <div class="note-header">Cá nhân</div>
+                        <div class="note-content">
+                            3 ghi chú, 2 công việc
+                        </div>
+                    </div>
+                    <div class="note-card pixel-border">
+                        <div class="note-header">Dự án</div>
+                        <div class="note-content">
+                            2 ghi chú, 4 công việc
+                        </div>
+                    </div>
+                    <div class="note-card pixel-border">
+                        <div class="note-header">Ý tưởng</div>
+                        <div class="note-content">
+                            4 ghi chú
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trash View (Hidden by default) -->
+            <div class="view-content" id="trash-view" style="display: none;">
+                <div class="notes-grid">
+                    <div class="note-card pixel-border">
+                        <div class="note-header">Danh sách phim</div>
+                        <div class="note-content">
+                            - The Matrix
+                            - Inception
+                            - Interstellar
+                            - The Dark Knight
+                        </div>
+                        <div class="note-footer">
+                            <span>05/06/2023</span>
+                            <span>Đã xóa: 19/06/2023</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Button - Thay đổi thành hình vuông pixel -->
+    <div class="add-button pixel-border" id="add-button">
+        <!-- Biểu tượng dấu cộng pixel -->
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="4" width="4" height="4" fill="#5a5a5a"/>
+            <rect x="10" y="8" width="4" height="4" fill="#5a5a5a"/>
+            <rect x="10" y="12" width="4" height="4" fill="#5a5a5a"/>
+            <rect x="10" y="16" width="4" height="4" fill="#5a5a5a"/>
+            <rect x="4" y="10" width="4" height="4" fill="#5a5a5a"/>
+            <rect x="8" y="10" width="4" height="4" fill="#5a5a5a"/>
+            <rect x="16" y="10" width="4" height="4" fill="#5a5a5a"/>
+        </svg>
+    </div>
+
+    <!-- Modal for Adding New Note/Task -->
+    <div class="modal-overlay" id="add-modal">
+        <div class="modal pixel-border">
+            <div class="modal-header">
+                <h3>Thêm ghi chú mới</h3>
+                <button class="close-modal" id="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="note-title">Tiêu đề</label>
+                    <input type="text" id="note-title" class="form-control" placeholder="Nhập tiêu đề...">
+                </div>
+                <div class="form-group">
+                    <label for="note-content">Nội dung</label>
+                    <textarea id="note-content" class="form-control" placeholder="Nhập nội dung..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="note-category">Phân loại</label>
+                    <select id="note-category" class="form-control">
+                        <option value="note">Ghi chú</option>
+                        <option value="task">Công việc</option>
+                        <option value="idea">Ý tưởng</option>
+                    </select>
+                </div>
+                <div class="form-group" id="task-date-group" style="display: none;">
+                    <label for="task-date">Hạn hoàn thành</label>
+                    <input type="date" id="task-date" class="form-control">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="pixel-button" id="cancel-add">Hủy</button>
+                <button class="pixel-button" id="save-note">Lưu</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Theme Selector
+            const themeOptions = document.querySelectorAll('.theme-option');
+            themeOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const theme = this.getAttribute('data-theme');
+                    document.body.setAttribute('data-theme', theme);
+                    
+                    // Update active class
+                    themeOptions.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // Navigation
+            const navItems = document.querySelectorAll('.nav-item');
+            const viewContents = document.querySelectorAll('.view-content');
+            const contentHeader = document.querySelector('.content-header h2');
+            
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const view = this.getAttribute('data-view');
+                    
+                    // Update active nav
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show corresponding view
+                    viewContents.forEach(content => {
+                        content.style.display = 'none';
+                    });
+                    document.getElementById(`${view}-view`).style.display = 'block';
+                    
+                    // Update header
+                    switch(view) {
+                        case 'notes':
+                            contentHeader.textContent = 'Ghi chú';
+                            break;
+                        case 'tasks':
+                            contentHeader.textContent = 'Công việc';
+                            break;
+                        case 'ideas':
+                            contentHeader.textContent = 'Ý tưởng';
+                            break;
+                        case 'tags':
+                            contentHeader.textContent = 'Thẻ';
+                            break;
+                        case 'trash':
+                            contentHeader.textContent = 'Thùng rác';
+                            break;
+                    }
+                });
+            });
+
+            // Task Checkboxes
+            const taskCheckboxes = document.querySelectorAll('.task-checkbox-input');
+            taskCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const taskItem = this.closest('.task-item');
+                    if (this.checked) {
+                        taskItem.classList.add('completed');
+                    } else {
+                        taskItem.classList.remove('completed');
+                    }
+                });
+            });
+
+            // Modal
+            const addButton = document.getElementById('add-button');
+            const addModal = document.getElementById('add-modal');
+            const closeModal = document.getElementById('close-modal');
+            const cancelAdd = document.getElementById('cancel-add');
+            const saveNote = document.getElementById('save-note');
+            const noteCategory = document.getElementById('note-category');
+            const taskDateGroup = document.getElementById('task-date-group');
+
+            addButton.addEventListener('click', function() {
+                addModal.classList.add('active');
+            });
+
+            function closeModalFunc() {
+                addModal.classList.remove('active');
+                // Reset form
+                document.getElementById('note-title').value = '';
+                document.getElementById('note-content').value = '';
+                document.getElementById('note-category').value = 'note';
+                document.getElementById('task-date').value = '';
+                taskDateGroup.style.display = 'none';
+            }
+
+            closeModal.addEventListener('click', closeModalFunc);
+            cancelAdd.addEventListener('click', closeModalFunc);
+
+            noteCategory.addEventListener('change', function() {
+                if (this.value === 'task') {
+                    taskDateGroup.style.display = 'block';
+                } else {
+                    taskDateGroup.style.display = 'none';
+                }
+            });
+
+            saveNote.addEventListener('click', function() {
+                const title = document.getElementById('note-title').value;
+                const content = document.getElementById('note-content').value;
+                const category = document.getElementById('note-category').value;
+                
+                if (!title || !content) {
+                    alert('Vui lòng nhập đầy đủ thông tin!');
+                    return;
+                }
+                
+                // Create new element based on category
+                if (category === 'note' || category === 'idea') {
+                    const notesGrid = category === 'note' ? 
+                        document.querySelector('#notes-view .notes-grid') : 
+                        document.querySelector('#ideas-view .notes-grid');
+                    
+                    const noteCard = document.createElement('div');
+                    noteCard.className = 'note-card pixel-border';
+                    noteCard.innerHTML = `
+                        <div class="note-header">${title}</div>
+                        <div class="note-content">${content.replace(/\n/g, '<br>')}</div>
+                        <div class="note-footer">
+                            <span>${new Date().toLocaleDateString('vi-VN')}</span>
+                            <span>${category === 'note' ? 'Ghi chú' : 'Ý tưởng'}</span>
+                        </div>
+                    `;
+                    
+                    notesGrid.prepend(noteCard);
+                    
+                    // Add click event to new note
+                    noteCard.addEventListener('click', function() {
+                        const noteTitle = this.querySelector('.note-header').textContent;
+                        const noteContent = this.querySelector('.note-content').innerHTML.replace(/<br>/g, '\n');
+                        
+                        document.getElementById('note-title').value = noteTitle;
+                        document.getElementById('note-content').value = noteContent.trim();
+                        document.getElementById('note-category').value = category;
+                        addModal.classList.add('active');
+                    });
+                } else if (category === 'task') {
+                    const taskList = document.querySelector('#tasks-view .task-list');
+                    const taskDate = document.getElementById('task-date').value;
+                    
+                    const taskItem = document.createElement('div');
+                    taskItem.className = 'task-item pixel-border';
+                    taskItem.innerHTML = `
+                        <label class="task-checkbox">
+                            <input type="checkbox" class="task-checkbox-input">
+                            <span class="checkmark"></span>
+                        </label>
+                        <div class="task-content">
+                            <div class="task-title">${title}</div>
+                            <div class="task-date">Hạn: ${taskDate || 'Không có'}</div>
+                        </div>
+                        <div class="task-actions">
+                            <svg class="action-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="8" y="4" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="12" y="4" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="8" y="8" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="12" y="8" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="8" y="12" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="12" y="12" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="8" y="16" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="12" y="16" width="4" height="4" fill="#5a5a5a"/>
+                            </svg>
+                            <svg class="action-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="8" y="4" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="12" y="4" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="4" y="8" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="16" y="8" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="4" y="12" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="16" y="12" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="8" y="16" width="4" height="4" fill="#5a5a5a"/>
+                                <rect x="12" y="16" width="4" height="4" fill="#5a5a5a"/>
+                            </svg>
+                        </div>
+                    `;
+                    
+                    taskList.prepend(taskItem);
+                    
+                    // Add event listener to new checkbox
+                    const newCheckbox = taskItem.querySelector('.task-checkbox-input');
+                    newCheckbox.addEventListener('change', function() {
+                        if (this.checked) {
+                            taskItem.classList.add('completed');
+                        } else {
+                            taskItem.classList.remove('completed');
+                        }
+                    });
+                }
+                
+                closeModalFunc();
+            });
+
+            // Make notes clickable
+            document.querySelectorAll('.note-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    // In a real app, this would open the note for editing
+                    const title = this.querySelector('.note-header').textContent;
+                    const content = this.querySelector('.note-content').textContent;
+                    
+                    document.getElementById('note-title').value = title;
+                    document.getElementById('note-content').value = content.trim();
+                    document.getElementById('note-category').value = 'note';
+                    addModal.classList.add('active');
+                });
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93ec37c7354720fc',t:'MTc0NzA3NzA0NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
